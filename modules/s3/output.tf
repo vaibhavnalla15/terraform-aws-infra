@@ -1,0 +1,9 @@
+output "s3_bucket_name" {
+  description = "The name of the bucket"
+  value       = aws_s3_bucket.tf_bucket.id
+}
+
+output "bucket_arn" {
+  description = "The ARN of the bucket"
+  value       = aws_s3_bucket.tf_bucket.arn
+}
