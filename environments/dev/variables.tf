@@ -7,3 +7,8 @@ variable "tags" {
   description = "Map of tags for the bucket"
   type        = map(string)
 }
+
+variable "iam_user" {
+  description = "IAM user name"
+  type        = string
+}
