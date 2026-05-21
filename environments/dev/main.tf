@@ -3,7 +3,7 @@ module "tf_bucket" {
   source = "../../modules/s3"
 
   bucket_name = var.bucket_name
-  tags = var.tags
+  tags        = var.tags
 }
 
 # Creates IAM resources for secure S3 access
@@ -24,4 +24,17 @@ module "iam" {
     Environment = "dev"
     Project     = "terraform-aws-infra"
   }
+}
+
+# Creating VPC module
+module "vpc" {
+  source = "../../modules/vpc"
+
+  vpc-cidr            = var.vpc-cidr
+  public-subnet-cidr  = var.public-subnet-cidr
+  private-subnet-cidr = var.private-subnet-cidr
+  azs                 = var.azs
+  environment         = var.environment
+
+  tags = var.vpc-tags
 }
