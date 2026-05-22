@@ -59,3 +59,65 @@ resource "aws_route_table_association" "name" {
   subnet_id      = aws_subnet.public-subnet[count.index].id
   route_table_id = aws_route_table.main-rt.id
 }
+
+# Creates Elastic IP for NAT Gateway internet access
+resource "aws_eip" "nat_eip" {
+
+  # Ensures Internet Gateway exists before allocating EIP
+  depends_on = [aws_internet_gateway.main-igw ]
+
+  # Tags for identification
+  tags = {
+    Name = "${var.environment}-nat-eip"
+  }
+}
+
+# Creates NAT Gateway for private subnet outbound internet access
+resource "aws_nat_gateway" "main_nat" {
+
+  # Elastic IP attached to NAT Gateway
+  allocation_id = aws_eip.nat_eip.id
+
+  # NAT Gateway must be placed inside a PUBLIC subnet
+  subnet_id = aws_subnet.public-subnet[0].id
+
+  # Tags for identification
+  tags = {
+    Name = "${var.environment}-nat-gateway"
+  }
+
+  # Ensures Internet Gateway exists first
+  depends_on = [aws_internet_gateway.main-igw]
+}
+
+# Creates private route table for private subnets
+resource "aws_route_table" "private_rt" {
+
+  # attach route table to VPC
+  vpc_id = aws_vpc.main.id
+
+  # Route outbound internet traffic through NAT Gateway
+  route {
+    cidr_block = "0.0.0.0/0"
+
+    nat_gateway_id = aws_nat_gateway.main_nat.id
+  }
+
+  # Tags for Identification
+  tags = {
+    Name = "${var.environment}-private-route-table"
+  }
+}
+
+# Associates all private subnets with private route table
+resource "aws_route_table_association" "private_rt_asso" {
+
+  # Creates association for each private subnet
+  count = length(var.private-subnet-cidr)
+
+  # Private subnet IDs
+  subnet_id = aws_subnet.private-subnet[count.index].id
+
+  # Private route table ID
+  route_table_id = aws_route_table.private_rt.id
+}
