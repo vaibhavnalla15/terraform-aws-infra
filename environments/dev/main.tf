@@ -37,4 +37,37 @@ module "vpc" {
   environment         = var.environment
 
   tags = var.vpc-tags
-} 
+}
+
+# Creating EC2 module
+module "ec2" {
+  # Path to EC2 Module
+  source = "../../modules/ec2"
+
+  # Ubuntu AMI ID
+  ami_id = var.ami_id
+
+  # EC2 Instance Type
+  instance_type = var.instance_type
+
+  # EC2 Instance Name
+  ec2_name = var.ec2_name
+
+  # Allowed ssh source IP
+  allowed_ssh_cidr = var.allowed_ssh_cidr
+
+  # Existing VPC module
+  vpc_id = module.vpc.vpc_id
+
+  # Deploy into 1st private subnet
+  subnet_id = module.vpc.private_subnet_ids[0]
+
+  # Existing S3 policy ARN from IAM module
+  s3_policy_arn = module.iam.iam_policy_arn
+
+  # Environment Name
+  environment = var.environment
+
+  # Tags
+  tags = var.tags
+}
