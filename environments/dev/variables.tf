@@ -70,3 +70,36 @@ variable "ec2_tags" {
   description = "Map of tags for the bucket"
   type        = map(string)
 }
+
+# RDS Module's variables
+variable "db_identifier" {
+  type = string
+}
+
+variable "db_name" {
+  type = string
+}
+
+variable "db_username" {
+  type = string
+}
+
+variable "db_password" {
+  type = string
+}
+
+variable "engine_version" {
+  type = string
+}
+
+variable "instance_class" {
+  type = string
+}
+
+variable "allocated_storage" {
+  type = number
+}
+
+variable "rds_tags" {
+  type = map(string)
+}

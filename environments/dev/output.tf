@@ -39,3 +39,18 @@ output "private_ip" {
 output "security_group_id" {
   value = module.ec2.security_group_id
 }
+
+# RDS Module's Outputs
+output "rds_endpoint" {
+  value = module.rds.rds_endpoint
+}
+
+# Outputs RDS instance ID
+output "rds_instance_id" {
+  value = module.rds.rds_instance_id
+}
+
+# Outputs RDS security group ID
+output "rds_security_group_id" {
+  value = module.rds.rds_security_group_id
+}
