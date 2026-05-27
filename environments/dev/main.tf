@@ -71,3 +71,47 @@ module "ec2" {
   # Tags
   tags = var.tags
 }
+
+# Creating RDS Module
+# Deploys PostgreSQL RDS inside private subnets
+module "rds" {
+
+  # Path to RDS Module
+  source = "../../modules/rds"
+
+  # Database identifier
+  db_identifier = var.db_identifier
+
+  # Database name
+  db_name = var.db_name
+
+  # Database master username
+  db_username = var.db_username
+
+  # Database master password
+  db_password = var.db_password
+
+  # PostgreSQL engine version
+  engine_version = var.engine_version
+
+  # RDS instance type
+  instance_class = var.instance_class
+
+  # Storage allocation in GB
+  allocated_storage = var.allocated_storage
+
+  # Existing VPC ID
+  vpc_id = module.vpc.vpc_id
+
+  # Existing private subnet IDs
+  private_subnet_ids = module.vpc.private_subnet_ids
+
+  # Existing EC2 security group ID
+  ec2_security_group_id = module.ec2.security_group_id
+
+  # Environment name
+  environment = var.environment
+
+  # Common tags
+  rds_tags = var.rds_tags
+}
