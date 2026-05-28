@@ -41,3 +41,8 @@ variable "tags" {
 variable "s3_policy_arn" {
   type = string
 }
+
+# ALB Security group ID
+variable "alb_security_group_id" {
+  type = string
+}

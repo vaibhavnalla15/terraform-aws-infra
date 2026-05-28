@@ -5,7 +5,7 @@ resource "aws_security_group" "ec2_sg" {
   name = "${var.environment}-ec2-sg"
 
   # Description for identification
-  description = "Security group for private EC2 instance"
+  description = "Allow HTTP traffic from ALB"
 
   # Attach security group to existing VPC
   vpc_id = var.vpc_id
@@ -14,13 +14,13 @@ resource "aws_security_group" "ec2_sg" {
   ingress {
     description = "Allow SSH access"
 
-    from_port = 22
-    to_port   = 22
+    from_port = 80
+    to_port   = 80
 
     protocol = "tcp"
 
-    # Trusted IP CIDR blocks
-    cidr_blocks = var.allowed_ssh_cidr
+    # Allow traffic only from ALB SG
+    security_groups = [var.alb_security_group_id]
   }
 
   # Allow all outbound internet traffic 
@@ -51,7 +51,7 @@ resource "aws_iam_role" "ec2_role" {
   name = "${var.environment}-ec2-role"
 
   # Trust policy allowing EC2 to assume this role
- assume_role_policy = jsonencode({
+  assume_role_policy = jsonencode({
     Version = "2012-10-17"
 
     Statement = [

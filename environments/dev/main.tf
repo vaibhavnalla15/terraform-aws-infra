@@ -6,7 +6,7 @@ module "tf_bucket" {
   tags        = var.tags
 }
 
-# Creates IAM resources for secure S3 access
+# Calling IAM Module
 module "iam" {
   source = "../../modules/iam"
 
@@ -26,7 +26,7 @@ module "iam" {
   }
 }
 
-# Creating VPC module
+# Calling VPC module
 module "vpc" {
   source = "../../modules/vpc"
 
@@ -39,7 +39,7 @@ module "vpc" {
   tags = var.vpc-tags
 }
 
-# Creating EC2 module
+# Calling EC2 module
 module "ec2" {
   # Path to EC2 Module
   source = "../../modules/ec2"
@@ -65,6 +65,9 @@ module "ec2" {
   # Existing S3 policy ARN from IAM module
   s3_policy_arn = module.iam.iam_policy_arn
 
+  # Attaching SG to ALB
+  alb_security_group_id = module.alb.alb_security_group_id
+
   # Environment Name
   environment = var.environment
 
@@ -72,46 +75,106 @@ module "ec2" {
   tags = var.tags
 }
 
-# Creating RDS Module
+# Calling RDS Module
 # Deploys PostgreSQL RDS inside private subnets
-module "rds" {
+# module "rds" {
 
-  # Path to RDS Module
-  source = "../../modules/rds"
+#   # Path to RDS Module
+#   source = "../../modules/rds"
 
-  # Database identifier
-  db_identifier = var.db_identifier
+#   # Database identifier
+#   db_identifier = var.db_identifier
 
-  # Database name
-  db_name = var.db_name
+#   # Database name
+#   db_name = var.db_name
 
-  # Database master username
-  db_username = var.db_username
+#   # Database master username
+#   db_username = var.db_username
 
-  # Database master password
-  db_password = var.db_password
+#   # Database master password
+#   db_password = var.db_password
 
-  # PostgreSQL engine version
-  engine_version = var.engine_version
+#   # PostgreSQL engine version
+#   engine_version = var.engine_version
 
-  # RDS instance type
-  instance_class = var.instance_class
+#   # RDS instance type
+#   instance_class = var.instance_class
 
-  # Storage allocation in GB
-  allocated_storage = var.allocated_storage
+#   # Storage allocation in GB
+#   allocated_storage = var.allocated_storage
+
+#   # Existing VPC ID
+#   vpc_id = module.vpc.vpc_id
+
+#   # Existing private subnet IDs
+#   private_subnet_ids = module.vpc.private_subnet_ids
+
+#   # Existing EC2 security group ID
+#   ec2_security_group_id = module.ec2.security_group_id
+
+#   # Environment name
+#   environment = var.environment
+
+#   # Common tags
+#   rds_tags = var.rds_tags
+# }
+
+# Calling ALB Module
+# Deploys public Application Load Balancer
+module "alb" {
+
+  # Path to alb module
+  source = "../../modules/alb"
 
   # Existing VPC ID
   vpc_id = module.vpc.vpc_id
 
-  # Existing private subnet IDs
-  private_subnet_ids = module.vpc.private_subnet_ids
+  # Public subnets for ALB
+  public_subnet_ids = module.vpc.public_subnet_ids
 
-  # Existing EC2 security group ID
-  ec2_security_group_id = module.ec2.security_group_id
+  # Applicaion port
+  target_port = 80
 
   # Environment name
   environment = var.environment
 
   # Common tags
-  rds_tags = var.rds_tags
+  alb_tags = var.tags
+}
+
+# Calling ASG Module
+# Deploys Auto Scaling Group for application instances
+module "asg" {
+
+  # Path to ASG Module
+  source = "../../modules/asg"
+
+  # AMI_ID
+  ami_id = var.ami_id
+
+  # EC2 Instance Type
+  instance_type = var.instance_type
+
+  # Deploy Instances into private subnets
+  private_subnet_ids = module.vpc.private_subnet_ids
+
+  # Existing EC2 security group
+  security_group_id = module.ec2.security_group_id
+
+  # Existing IAM instance profile
+  iam_instance_profile_name = module.ec2.instance_profile_name
+
+  # Existing Target Group ARN
+  target_group_arn = module.alb.target_group_arn
+
+  # Auto scaling configuration
+  desired_capacity = 2
+  min_size         = 2
+  max_size         = 4
+
+  # Environment name
+  environment = var.environment
+
+  # Common tags
+  asg-tags = var.tags
 }
