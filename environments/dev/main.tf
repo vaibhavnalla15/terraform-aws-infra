@@ -20,10 +20,12 @@ module "iam" {
   object_arn = module.tf_bucket.object_arn
 
   # Common tags
-  tags = {
-    Environment = "dev"
-    Project     = "terraform-aws-infra"
-  }
+  tags = merge(
+    var.tags,
+    {
+      Environment = local.environment
+    }
+  )
 }
 
 # Calling VPC module
@@ -34,9 +36,14 @@ module "vpc" {
   public-subnet-cidr  = var.public-subnet-cidr
   private-subnet-cidr = var.private-subnet-cidr
   azs                 = var.azs
-  environment         = var.environment
+  environment         = local.environment
 
-  tags = var.vpc-tags
+  tags = merge(
+    var.vpc-tags,
+    {
+      Environment = local.environment
+    }
+  )
 }
 
 # Calling EC2 module
@@ -69,10 +76,15 @@ module "ec2" {
   alb_security_group_id = module.alb.alb_security_group_id
 
   # Environment Name
-  environment = var.environment
+  environment = local.environment
 
   # Tags
-  tags = var.tags
+  tags = merge(
+    var.ec2_tags,
+    {
+      Environment = local.environment
+    }
+  )
 }
 
 # Calling RDS Module
@@ -113,10 +125,15 @@ module "ec2" {
 #   ec2_security_group_id = module.ec2.security_group_id
 
 #   # Environment name
-#   environment = var.environment
+#   environment = local.environment
 
 #   # Common tags
-#   rds_tags = var.rds_tags
+#     tags = merge(
+#   var.rds_tags,
+#   {
+#     Environment = local.environment
+#   }
+# )
 # }
 
 # Calling ALB Module
@@ -136,10 +153,15 @@ module "alb" {
   target_port = 80
 
   # Environment name
-  environment = var.environment
+  environment = local.environment
 
   # Common tags
-  alb_tags = var.tags
+  alb_tags = merge(
+    var.tags,
+    {
+      Environment = local.environment
+    }
+  )
 }
 
 # Calling ASG Module
@@ -173,8 +195,13 @@ module "asg" {
   max_size         = 4
 
   # Environment name
-  environment = var.environment
+  environment = local.environment
 
   # Common tags
-  asg-tags = var.tags
+  asg-tags = merge(
+    var.tags,
+    {
+      Environment = local.environment
+    }
+  )
 }
