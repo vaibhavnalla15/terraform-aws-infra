@@ -41,10 +41,6 @@ variable "vpc-tags" {
   type        = map(string)
 }
 
-variable "environment" {
-  type = string
-}
-
 # EC2 Module variables
 variable "ami_id" {
   description = "Official AMI ID from AWS"
