@@ -20,7 +20,7 @@ module "iam" {
   object_arn = module.tf_bucket.object_arn
 
   # Common tags
-  tags = merge(
+  tags =  merge(
     var.tags,
     {
       Environment = local.environment
@@ -51,9 +51,6 @@ module "ec2" {
   # Path to EC2 Module
   source = "../../modules/ec2"
 
-  # Ubuntu AMI ID
-  ami_id = var.ami_id
-
   # EC2 Instance Type
   instance_type = var.instance_type
 
@@ -79,7 +76,7 @@ module "ec2" {
   environment = local.environment
 
   # Tags
-  tags = merge(
+    tags = merge(
     var.ec2_tags,
     {
       Environment = local.environment
@@ -128,12 +125,12 @@ module "ec2" {
 #   environment = local.environment
 
 #   # Common tags
-#     tags = merge(
-#   var.rds_tags,
-#   {
-#     Environment = local.environment
-#   }
-# )
+  #     tags = merge(
+  #   var.rds_tags,
+  #   {
+  #     Environment = local.environment
+  #   }
+  # )
 # }
 
 # Calling ALB Module
@@ -153,10 +150,10 @@ module "alb" {
   target_port = 80
 
   # Environment name
-  environment = local.environment
+  environment = local.environment 
 
   # Common tags
-  alb_tags = merge(
+  alb_tags =  merge(
     var.tags,
     {
       Environment = local.environment
@@ -170,10 +167,7 @@ module "asg" {
 
   # Path to ASG Module
   source = "../../modules/asg"
-
-  # AMI_ID
-  ami_id = var.ami_id
-
+  
   # EC2 Instance Type
   instance_type = var.instance_type
 

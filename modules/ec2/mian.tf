@@ -100,7 +100,7 @@ resource "aws_iam_instance_profile" "ec2_profile" {
 resource "aws_instance" "private_ec2" {
 
   # AMI ID for EC2 instance
-  ami = var.ami_id
+  ami = data.aws_ami.amazon_linux.id
 
   # EC2 instacne type
   instance_type = var.instance_type

@@ -17,3 +17,8 @@ output "security_group_id" {
 output "instance_profile_name" {
   value = aws_iam_instance_profile.ec2_profile.name
 }
+
+# Outputs dynamically discovered Amazon Linux AMI ID
+output "ami_id" {
+  value = data.aws_ami.amazon_linux.id
+}

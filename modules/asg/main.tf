@@ -4,7 +4,7 @@ resource "aws_launch_template" "tf_launch_temp" {
   name_prefix = "${var.environment}-launch-template"
 
   # AMI ID for EC2 instances
-  image_id = var.ami_id
+  image_id = data.aws_ami.amazon_linux.id
 
   # EC2 instance type
   instance_type = var.instance_type

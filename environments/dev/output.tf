@@ -63,3 +63,8 @@ output "alb_dns_name" {
 output "asg_name" {
   value = module.asg.asg_name
 }
+
+# Outputs latest dynamically discovered AMI ID
+output "latest_ami_id" {
+  value = module.ec2.ami_id
+}
