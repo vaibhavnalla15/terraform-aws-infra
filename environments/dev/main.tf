@@ -260,3 +260,24 @@ module "dynamic_sg" {
     }
   )
 }
+
+# Secrete Management module
+module "secrets" {
+
+  # Module path
+  source = "../../modules/secrets"
+
+  # Database password
+  db_password = var.db_password
+
+  # Environment name
+  environment = local.environment
+
+  # Common tags
+  tags = merge(
+    var.tags,
+    {
+      Environment = local.environment
+    }
+  )
+}

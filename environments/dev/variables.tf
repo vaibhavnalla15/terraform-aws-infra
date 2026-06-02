@@ -93,3 +93,14 @@ variable "allocated_storage" {
 variable "rds_tags" {
   type = map(string)
 }
+
+# Database password
+variable "db_password" {
+
+  type      = string
+  sensitive = true
+}
+
+variable "environment" {
+  type = string
+}

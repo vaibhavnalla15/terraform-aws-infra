@@ -72,3 +72,7 @@ output "latest_ami_id" {
 output "security_group_id" {
   value = module.dynamic_sg.security_group_id
 }
+
+output "parameter_name" {
+  value = module.secrets.parameter_name
+}
