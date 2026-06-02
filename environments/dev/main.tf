@@ -20,7 +20,7 @@ module "iam" {
   object_arn = module.tf_bucket.object_arn
 
   # Common tags
-  tags =  merge(
+  tags = merge(
     var.tags,
     {
       Environment = local.environment
@@ -76,7 +76,7 @@ module "ec2" {
   environment = local.environment
 
   # Tags
-    tags = merge(
+  tags = merge(
     var.ec2_tags,
     {
       Environment = local.environment
@@ -125,12 +125,12 @@ module "ec2" {
 #   environment = local.environment
 
 #   # Common tags
-  #     tags = merge(
-  #   var.rds_tags,
-  #   {
-  #     Environment = local.environment
-  #   }
-  # )
+#     tags = merge(
+#   var.rds_tags,
+#   {
+#     Environment = local.environment
+#   }
+# )
 # }
 
 # Calling ALB Module
@@ -150,10 +150,10 @@ module "alb" {
   target_port = 80
 
   # Environment name
-  environment = local.environment 
+  environment = local.environment
 
   # Common tags
-  alb_tags =  merge(
+  alb_tags = merge(
     var.tags,
     {
       Environment = local.environment
@@ -167,7 +167,7 @@ module "asg" {
 
   # Path to ASG Module
   source = "../../modules/asg"
-  
+
   # EC2 Instance Type
   instance_type = var.instance_type
 
@@ -193,6 +193,67 @@ module "asg" {
 
   # Common tags
   asg-tags = merge(
+    var.tags,
+    {
+      Environment = local.environment
+    }
+  )
+}
+
+# Dynamic Secutrity Group module 
+module "dynamic_sg" {
+
+  # module path
+  source = "../../modules/dynamic-sg"
+
+  # SG Name
+  security_group_name = "${local.environment}-dynamic-sg"
+
+  # Existing VPC ID
+  vpc_id = module.vpc.vpc_id
+
+  # Dynamic ingress rules 
+  ingress_rule = [
+    {
+      from_port = 22
+      to_port   = 22
+      protocol  = "tcp"
+
+      cidr_blocks = ["0.0.0.0/0"]
+
+      description = "Allow SSH"
+    },
+    {
+      from_port = 80
+      to_port   = 80
+      protocol  = "tcp"
+
+      cidr_blocks = ["0.0.0.0/0"]
+
+      description = "Allow HTTP"
+    },
+    {
+      from_port = 443
+      to_port   = 443
+      protocol  = "tcp"
+
+      cidr_blocks = ["0.0.0.0/0"]
+
+      description = "Allow HTTPS"
+    },
+    {
+      from_port = 8080
+      to_port   = 8080
+      protocol  = "tcp"
+
+      cidr_blocks = ["0.0.0.0/0"]
+
+      description = "localhost"
+    }
+  ]
+
+  # Common Tags
+  tags = merge(
     var.tags,
     {
       Environment = local.environment

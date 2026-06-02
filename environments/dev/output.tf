@@ -35,10 +35,10 @@ output "private_ip" {
   value = module.ec2.private_ip
 }
 
-# Ouputs security group ID
-output "security_group_id" {
-  value = module.ec2.security_group_id
-}
+# # Ouputs security group ID
+# output "security_group_id" {
+#   value = module.ec2.security_group_id
+# }
 
 # # RDS Module's Outputs
 # output "rds_endpoint" {
@@ -67,4 +67,8 @@ output "asg_name" {
 # Outputs latest dynamically discovered AMI ID
 output "latest_ami_id" {
   value = module.ec2.ami_id
+}
+
+output "security_group_id" {
+  value = module.dynamic_sg.security_group_id
 }
