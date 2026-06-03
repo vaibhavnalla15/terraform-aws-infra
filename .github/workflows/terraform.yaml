@@ -28,7 +28,7 @@ jobs:
 
       # Terraform Format Check
       - name: Terraform Format
-        run: terraform fmt -chcek -recursive
+        run: terraform fmt -check -recursive
 
       # Terraform Init
       - name: Terraform init
