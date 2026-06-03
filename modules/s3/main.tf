@@ -1,7 +1,7 @@
 # S3 Bucket Creation
 resource "aws_s3_bucket" "tf_bucket" {
   bucket = var.bucket_name
-  tags = var.tags
+  tags   = var.tags
 }
 
 # S3 Bucket enabling versioning

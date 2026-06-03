@@ -64,7 +64,7 @@ resource "aws_route_table_association" "name" {
 resource "aws_eip" "nat_eip" {
 
   # Ensures Internet Gateway exists before allocating EIP
-  depends_on = [aws_internet_gateway.main-igw ]
+  depends_on = [aws_internet_gateway.main-igw]
 
   # Tags for identification
   tags = {

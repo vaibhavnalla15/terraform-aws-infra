@@ -10,11 +10,11 @@ variable "vpc_id" {
 
 # Dynamic ingress rules list
 variable "ingress_rule" {
-  
+
   type = list(object({
-    
+
     # Starting port
-    from_port = number 
+    from_port = number
 
     # Ending port
     to_port = number
@@ -28,7 +28,7 @@ variable "ingress_rule" {
     # Rule description
     description = string
   }))
-}   
+}
 
 # Common tags
 variable "tags" {

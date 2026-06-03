@@ -10,5 +10,5 @@ output "bucket_arn" {
 
 output "object_arn" {
   description = "Outputs object ARN pattern for object-level S3 permissions"
-  value = "${aws_s3_bucket.tf_bucket.arn}/*"
+  value       = "${aws_s3_bucket.tf_bucket.arn}/*"
 }
