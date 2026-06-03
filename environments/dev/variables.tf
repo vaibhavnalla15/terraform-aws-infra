@@ -74,8 +74,10 @@ variable "db_username" {
   type = string
 }
 
+# Database password
 variable "db_password" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "engine_version" {
@@ -92,13 +94,6 @@ variable "allocated_storage" {
 
 variable "rds_tags" {
   type = map(string)
-}
-
-# Database password
-variable "db_password" {
-
-  type      = string
-  sensitive = true
 }
 
 variable "environment" {
