@@ -38,3 +38,8 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
         working-directory: "environments/dev"
+
+      # Terraform Plan
+      - name: Terraform Plan
+        run: terrafom plan -input=false
+        working-directory: "environments/dev"
