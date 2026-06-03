@@ -25,3 +25,17 @@ jobs:
       # Verify installation
       - name: Terraform Version
         run: terraform version
+
+      # Terraform Format Check
+      - name: Terraform Format
+        run: terraform fmt -chcek -recursive
+
+      # Terraform Init
+      - name: Terraform init
+        run: terraform init
+        working-directory: "../../environments/dev"
+
+      # Terraform Validate
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: "../../environments/dev"
