@@ -32,11 +32,10 @@ jobs:
 
       # Terraform Init
       - name: Terraform init
-        run: terraform init
-        working-directory: "../../environments/dev"
+        run: terraform init -backend=false
+        working-directory: "environments/dev"
 
       # Terraform Validate
       - name: Terraform Validate
         run: terraform validate
-        working-directory: "../../environments/dev"
-        
+        working-directory: "environments/dev"
