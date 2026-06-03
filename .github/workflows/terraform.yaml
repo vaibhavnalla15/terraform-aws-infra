@@ -41,5 +41,5 @@ jobs:
 
       # Terraform Plan
       - name: Terraform Plan
-        run: terrafom plan -input=false
+        run: terraform plan -input=false
         working-directory: "environments/dev"
