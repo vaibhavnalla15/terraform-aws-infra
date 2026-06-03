@@ -1,14 +1,14 @@
 name: Terraform CI
 
-'on':
+on:
   push:
     branches:
       - main
     paths:
-      - .github/workflows/terraform.yaml
-  workflow_dispatch:
+      - ".github/workflows/terraform.yaml"
 
-    null
+  workflow_dispatch: {}
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
     steps:
       # Checkout Code
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       # Install Terraform
       - name: Setup Terraform
@@ -24,4 +24,4 @@ jobs:
 
       # Verify installation
       - name: Terraform Version
-        uses: terraform version
+        run: terraform version
