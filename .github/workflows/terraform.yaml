@@ -1,10 +1,10 @@
 name: Terraform CI
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/terraform.yaml"
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - ".github/workflows/terraform.yaml"
 
   workflow_dispatch: {}
 
